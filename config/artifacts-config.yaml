@@ -1,0 +1,6 @@
+artifacts:
+  root_dir: artifacts
+  model_dir: models
+  model_filename: pipe.joblib
+  metrics_dir: metrics
+  metrics_filename: metrics.json
