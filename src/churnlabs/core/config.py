@@ -1,4 +1,5 @@
 import yaml
+import tomllib
 from pathlib import Path
 from typing import Any
 
@@ -27,6 +28,31 @@ def _load_yaml(file_name: str) -> dict[str, Any]:
 
     with config_file_path.open("r", encoding="utf-8") as file:
         data = yaml.safe_load(file)
+
+    return data or {}
+
+
+def _load_toml(file_name: str) -> dict[str, Any]:
+    """
+    Load a TOML configuration file from the project's root directory.
+
+    Args:
+        file_name (str): Name of the TOML file to load.
+
+    Returns:
+        dict[str, Any]: Parsed TOML content as a dictionary.
+
+    Raises:
+        FileNotFoundError: If the TOML file does not exist.
+        tomllib.TOMLDecodeError: If the file content is not valid TOML.
+    """
+    toml_file_path = PROJECT_ROOT / file_name
+
+    if not toml_file_path.exists():
+        raise FileNotFoundError(f"Configuration file not found at: {toml_file_path}")
+
+    with open(toml_file_path, "rb") as f:
+        data = tomllib.load(f)
 
     return data or {}
 
@@ -79,3 +105,14 @@ def get_huggingface_config() -> dict[str, Any]:
         Dict[str, Any]: Parsed YAML configuration as dictionary.
     """
     return _load_yaml("huggingface-config.yaml")
+
+
+def get_model_version() -> str:
+    """
+    Load and return the project version from pyproject.toml.
+
+    Returns:
+        str: The current project version.
+    """
+    pyproject_data = _load_toml("pyproject.toml")
+    return pyproject_data.get("project", {}).get("version", "0.0.0")
