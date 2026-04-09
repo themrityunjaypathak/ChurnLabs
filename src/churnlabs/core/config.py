@@ -39,3 +39,13 @@ def get_data_config() -> dict[str, Any]:
         dict[str, Any]: Parsed YAML configuration as dictionary.
     """
     return _load_yaml("data-config.yaml")
+
+
+def get_training_config() -> dict[str, Any]:
+    """
+    Load and parse the project's model training configuration file.
+
+    Returns:
+        dict[str, Any]: Parsed YAML configuration as dictionary.
+    """
+    return _load_yaml("training-config.yaml")
