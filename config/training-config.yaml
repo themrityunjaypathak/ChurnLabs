@@ -1,0 +1,6 @@
+training:
+  target_column: churn
+  test_size: 0.2
+  random_state: 42
+  stratify: true
+  min_recall: 0.85
