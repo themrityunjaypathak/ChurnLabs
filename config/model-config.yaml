@@ -1,0 +1,8 @@
+model:
+  type: logistic_regression
+  params:
+    class_weight: balanced
+    random_state: 42
+
+threshold:
+  value: 0.3658
