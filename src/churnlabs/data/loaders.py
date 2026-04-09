@@ -33,3 +33,33 @@ def load_raw_data() -> pd.DataFrame:
         )
 
     return pd.read_csv(file_path)
+
+
+def load_processed_data() -> pd.DataFrame:
+    """
+    Load processed dataset as defined in data-config.yaml.
+
+    Returns:
+        pd.DataFrame: DataFrame loaded from Parquet file.
+
+    Raises:
+        FileNotFoundError: If processed CSV file does not exist.
+        KeyError: If required config keys are missing.
+    """
+    config = get_data_config()
+
+    data_config = config["data"]
+    processed_dir = data_config["processed_dir"]
+    processed_file = data_config["processed_file"]
+
+    file_path: Path = PROJECT_ROOT / processed_dir / processed_file
+
+    if not file_path.exists():
+        raise FileNotFoundError(f"Processed data file not found at: {file_path}")
+
+    if file_path.suffix.lower() != ".parquet":
+        raise TypeError(
+            f"Invalid file type '{file_path.suffix}'. Expected '.parquet' file."
+        )
+
+    return pd.read_parquet(file_path)
