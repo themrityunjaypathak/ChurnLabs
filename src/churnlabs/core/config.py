@@ -69,3 +69,13 @@ def get_artifacts_config() -> dict[str, Any]:
         Dict[str, Any]: Parsed YAML configuration as dictionary.
     """
     return _load_yaml("artifacts-config.yaml")
+
+
+def get_huggingface_config() -> dict[str, Any]:
+    """
+    Load and parse the project's huggingface configuration file.
+
+    Returns:
+        Dict[str, Any]: Parsed YAML configuration as dictionary.
+    """
+    return _load_yaml("huggingface-config.yaml")
