@@ -1,0 +1,11 @@
+huggingface:
+  repo_id: themrityunjaypathak/churnlabs
+  base_url: https://huggingface.co/themrityunjaypathak/churnlabs/resolve/main
+
+artifacts:
+  model_path: artifacts/models/pipe.joblib
+  metrics_path: artifacts/metrics/metrics.json
+
+remote:
+  model_file: models/pipe.joblib
+  metrics_file: metrics/metrics.json
