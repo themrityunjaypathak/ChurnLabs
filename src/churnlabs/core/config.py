@@ -59,3 +59,13 @@ def get_model_config() -> dict[str, Any]:
         dict[str, Any]: Parsed YAML configuration as dictionary.
     """
     return _load_yaml("model-config.yaml")
+
+
+def get_artifacts_config() -> dict[str, Any]:
+    """
+    Load and parse the project's artifcats configuration file.
+
+    Returns:
+        Dict[str, Any]: Parsed YAML configuration as dictionary.
+    """
+    return _load_yaml("artifacts-config.yaml")
