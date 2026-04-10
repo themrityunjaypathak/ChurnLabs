@@ -1,0 +1,9 @@
+[build]
+  # The project folder is inside a folder named "frontend"
+  base = "frontend"
+
+  # This is the command used to build the project
+  command = "npm run build"
+
+  # After building, deploy the files inside the "dist" folder
+  publish = "dist"
