@@ -1,0 +1,52 @@
+# Virtual Environment
+.venv/
+.env
+*.env
+
+# Jupyter Notebooks
+notebooks/
+.ipynb_checkpoints/
+*.ipynb
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Dataset
+*.parquet
+*.csv
+/data/
+
+# Logs
+*.log
+*.tmp
+*.bak
+
+# Git
+.git/
+.gitignore
+
+# IDE/OS Files
+.vscode/
+.idea/
+
+# Build Artifacts
+*.egg-info/
+build/
+dist/
+wheels/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# MLflow
+mlartifacts/
+mlflow.db
+mlruns/
+
+# Node Dependencies
+node_modules/
+/frontend/
