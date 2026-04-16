@@ -355,7 +355,7 @@ http://localhost:8000/docs
 
 Access the live API documentation [here](https://churnlabs.onrender.com/docs) or Click on the Image below.
 
-<a href="https://churnlabs.onrender.com/docs"><img title="Swagger UI" src="https://github.com/user-attachments/assets/a24d190c-e8b7-4679-969d-13a1368c5d6e"></a>
+<a href="https://churnlabs.onrender.com/docs"><img title="Swagger UI" src="https://github.com/user-attachments/assets/0ce583ab-55a3-421d-9504-43e3bd15831f"></a>
 
 <hr>
 
