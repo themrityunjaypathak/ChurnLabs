@@ -14,7 +14,7 @@
 
 </div>
 
-<a href="https://churnlabs.netlify.app"><img title="ChurnLabs" src="https://github.com/user-attachments/assets/8a699a85-34bd-4e45-8a8e-67e2564ded2e"></a>
+<a href="https://churnlabs.netlify.app"><img title="ChurnLabs" src="https://github.com/user-attachments/assets/88d4eeb6-3367-4e87-8932-a6a3624225d2"></a>
 
 ## Table of Contents
 - [Problem Statement](#problem-statement)
@@ -104,7 +104,7 @@ http://localhost:8000
 
 ## Workflow
 
-<img title="Workflow Diagram" src="https://github.com/user-attachments/assets/206c1b10-94a6-4cae-93b4-d4ead782f594">
+<img title="Workflow Diagram" src="https://github.com/user-attachments/assets/080a25b1-2929-409b-bdba-15302b03c4b7">
 
 <hr>
 
@@ -293,7 +293,7 @@ http://localhost:5000
     - Visualize Evaluation Metrics
     - Inspect Experiment Artifacts
 
-<img title="MLflow Dashboard" src="https://github.com/user-attachments/assets/0380935c-f7d2-4a43-96dd-9729b991a18c">
+<img title="MLflow Dashboard" src="https://github.com/user-attachments/assets/35a086b4-f3af-48fe-9a79-c85eda64ce5f">
 
 <hr>
 
@@ -355,7 +355,7 @@ http://localhost:8000/docs
 
 Access the live API documentation [here](https://churnlabs.onrender.com/docs) or Click on the Image below.
 
-<a href="https://churnlabs.onrender.com/docs"><img title="Swagger UI" src="https://github.com/user-attachments/assets/c147c912-bb67-4e31-87b9-7fb811317fd8"></a>
+<a href="https://churnlabs.onrender.com/docs"><img title="Swagger UI" src="https://github.com/user-attachments/assets/a24d190c-e8b7-4679-969d-13a1368c5d6e"></a>
 
 <hr>
 
@@ -403,7 +403,7 @@ http://localhost:5173
 
 Access the live application [here](https://churnlabs.netlify.app) or Click on the Image below.
 
-<a href="https://churnlabs.netlify.app"><img title="React Frontend" src="https://github.com/user-attachments/assets/5036274b-f448-4dda-a84a-08e4c133e1ae"></a>
+<a href="https://churnlabs.netlify.app"><img title="React Frontend" src="https://github.com/user-attachments/assets/f5760807-0c32-4d2f-bcf8-e94423ec3e80"></a>
 
 <hr>
 
@@ -423,7 +423,7 @@ http://localhost:3000
 http://localhost:8000
 ```
 
-<img title="Docker Compose" src="https://github.com/user-attachments/assets/b2731bde-3e6c-4ea8-926a-65219817759f">
+<img title="Docker Compose" src="https://github.com/user-attachments/assets/068c312b-a626-479c-9c87-f2776fc64e5e">
 
 <hr>
 
@@ -468,11 +468,11 @@ themrityunjaypathak/churnlabs-frontend:v1
 > 
 > View the Backend Docker Image [here](https://hub.docker.com/r/themrityunjaypathak/churnlabs-api) or Click on the Image below.
 >
-> <a href="https://hub.docker.com/r/themrityunjaypathak/churnlabs-api"><img title="Backend Docker Image" src="https://github.com/user-attachments/assets/233dece2-a8ef-4974-82a9-0364c9d0ac7f"></a>
+> <a href="https://hub.docker.com/r/themrityunjaypathak/churnlabs-api"><img title="Backend Docker Image" src="https://github.com/user-attachments/assets/cbb1c20d-4eba-4b73-89fb-4f52ae951d41"></a>
 >
 > View the Frontend Docker Image [here](https://hub.docker.com/r/themrityunjaypathak/churnlabs-frontend) or Click on the Image below.
 >
-> <a href="https://hub.docker.com/r/themrityunjaypathak/churnlabs-frontend"><img title="Frontend Docker Image" src="https://github.com/user-attachments/assets/73e986e0-07d5-46c3-8efa-c63b36b51c22"></a>
+> <a href="https://hub.docker.com/r/themrityunjaypathak/churnlabs-frontend"><img title="Frontend Docker Image" src="https://github.com/user-attachments/assets/adb254b5-b357-4977-b0cf-0d5fa6e7eb42"></a>
 
 <hr>
 
@@ -498,7 +498,7 @@ config/
 └── artifacts-config.yaml
 ```
 
-<img title="Config Files" src="https://github.com/user-attachments/assets/2f2ab036-e203-4082-b84c-8e25fd23da0b">
+<img title="Config Files" src="https://github.com/user-attachments/assets/f7b07aca-ac4d-4f22-b7aa-a822d8f674e3">
 
 ### Why this is useful?
 
@@ -552,7 +552,7 @@ threshold:
 	- Command Execution
 - into a single tool.
 
-<img title="uv by Astral" src="https://github.com/user-attachments/assets/7f94bfc0-ba7b-4516-99ec-c9d769156135">
+<img title="uv by Astral" src="https://github.com/user-attachments/assets/0f061d2f-78d2-4bcc-9a48-70cf5700fc68">
 
 ### Why use `uv` over `pip`?
 
@@ -727,7 +727,7 @@ http://localhost:5000
 ```
 - The MLflow dashboard allows you to explore experiment runs and compare model results.
 
-<img title="MLflow UI" src="https://github.com/user-attachments/assets/0380935c-f7d2-4a43-96dd-9729b991a18c">
+<img title="MLflow UI" src="https://github.com/user-attachments/assets/30a4f665-84b6-45bb-8b50-db89c96ee5b2">
 
 ### Types of Experiments Performed
 - During model development, two types of experiments were performed and tracked using MLflow.
@@ -749,7 +749,7 @@ http://localhost:5000
     - PR-AUC
 - This helps identify the best-performing model based on business requirements.
 
-<img title="Model Comparison" src="https://github.com/user-attachments/assets/b5752200-6f65-4e7e-823e-30792cfa0799">
+<img title="Model Comparison" src="https://github.com/user-attachments/assets/0a30ad8b-458a-41c3-bfc4-b766d7e2bf52">
 
 ### 2. Threshold Optimization
 - After selecting the best-performing model, another experiment is conducted to optimize the decision threshold.
@@ -761,7 +761,7 @@ http://localhost:5000
     - Balancing precision-recall trade-offs.
 - Optimal threshold selection allowed the model to achieve 90% recall for the churn class.
 
-<img title="Threshold Optimization" src="https://github.com/user-attachments/assets/a4578589-5f28-436a-979f-e041678f47d2">
+<img title="Threshold Optimization" src="https://github.com/user-attachments/assets/6753c497-6e2b-4b90-bcc3-5a1be9fdc453">
 
 ### Logged Artifacts
 - MLflow also stores experiment artifacts generated during training.
@@ -1047,7 +1047,7 @@ ax[1].grid(visible=False)
 plt.tight_layout()
 plt.show()
 ```
-<img title="Confusion Matrix Plot" src="https://github.com/user-attachments/assets/6094773f-14ba-453d-aebe-ee204482e102">
+<img title="Confusion Matrix Plot" src="https://github.com/user-attachments/assets/31c58541-5cc3-420e-883d-4796b7499c35">
 </details>
 
 <hr>
@@ -1091,7 +1091,7 @@ plt.grid(axis='both', linestyle='--', alpha=1)
 plt.tight_layout()
 plt.show()
 ```
-<img title="Feature Importance Plot" src="https://github.com/user-attachments/assets/636d7f0a-d882-4197-a53b-c41efc8f1619">
+<img title="Feature Importance Plot" src="https://github.com/user-attachments/assets/fe447aab-ed24-4d03-9de2-4414e50bd441">
 </details>
 
 <hr>
@@ -1178,7 +1178,7 @@ ax[1].grid(visible=False)
 plt.tight_layout()
 plt.show()
 ```
-<img title="Confusion Matrix Plot" src="https://github.com/user-attachments/assets/bfb6b5a0-9a8f-451a-9b83-113db810cd68">
+<img title="Confusion Matrix Plot" src="https://github.com/user-attachments/assets/75c9791d-a952-4d85-b443-497e89b82b4c">
 </details>
 
 <hr>
@@ -1224,7 +1224,7 @@ ax[1].grid(visible=False)
 plt.tight_layout()
 plt.show()
 ```
-<img title="Confusion Matrix Plot" src="https://github.com/user-attachments/assets/06f62890-c569-48f7-8051-ef562af1c0c5">
+<img title="Confusion Matrix Plot" src="https://github.com/user-attachments/assets/8dd991b1-8b00-4b42-bf79-1c6ad235f8a4">
 </details>
 
 <hr>
