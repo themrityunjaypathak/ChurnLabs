@@ -174,7 +174,7 @@ function App() {
         <nav className="nav-links">
 
           <a
-            href="#"
+            href="https://github.com/themrityunjaypathak/ChurnLabs"
             target="_blank"
             rel="noreferrer"
           >
@@ -182,7 +182,7 @@ function App() {
           </a>
 
           <a
-            href="#"
+            href="https://churnlabs.onrender.com/docs"
             target="_blank"
             rel="noreferrer"
           >
@@ -190,7 +190,7 @@ function App() {
           </a>
 
           <a
-            href="#"
+            href="https://hub.docker.com/r/themrityunjaypathak"
             target="_blank"
             rel="noreferrer"
           >
@@ -201,7 +201,7 @@ function App() {
 
         <div className="star">
           <a
-            href="#"
+            href="https://github.com/themrityunjaypathak/ChurnLabs"
             target="_blank"
             rel="noreferrer"
           >
@@ -223,7 +223,7 @@ function App() {
       <div className={`mobile-menu ${menuOpen ? "active" : ""}`}>
 
         <a
-          href="#"
+          href="https://github.com/themrityunjaypathak/ChurnLabs"
           target="_blank"
           rel="noreferrer"
         >
@@ -231,7 +231,7 @@ function App() {
         </a>
 
         <a
-          href="#"
+          href="https://churnlabs.onrender.com/docs"
           target="_blank"
           rel="noreferrer"
         >
@@ -239,7 +239,7 @@ function App() {
         </a>
 
         <a
-          href="#"
+          href="https://hub.docker.com/r/themrityunjaypathak"
           target="_blank"
           rel="noreferrer"
         >
@@ -247,7 +247,7 @@ function App() {
         </a>
 
         <a
-          href="#"
+          href="https://github.com/themrityunjaypathak/ChurnLabs"
           target="_blank"
           rel="noreferrer"
           className="star-btn"
