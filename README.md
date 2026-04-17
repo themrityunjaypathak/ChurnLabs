@@ -1,4 +1,4 @@
-<h3 align="center">ChurnLabs : Customer Churn Prediction</h3>
+<h3 align="center">ChurnLabs : Customer Churn Prediction System</h3>
 
 <div align="center">
 
