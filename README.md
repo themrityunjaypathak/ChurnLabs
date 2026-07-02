@@ -1,10 +1,10 @@
-<h3 align="center">ChurnLabs : Customer Churn Prediction System</h3>
+<h3 align="center" id="top">ChurnLabs : Customer Churn Prediction System</h3>
 
 <div align="center">
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-00C7B7?style=flat&logo=netlify&logoColor=white)](https://churnlabs.netlify.app)
-[![API Docs](https://img.shields.io/badge/API-Docs-009688?style=flat&logo=fastapi&logoColor=white)](https://churnlabs.onrender.com/docs)
-[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-Image-2496ED?style=flat&logo=docker&logoColor=white)](https://hub.docker.com/r/themrityunjaypathak)
+[![API Docs](https://img.shields.io/badge/API-Docs-019486?style=flat&logo=fastapi&logoColor=white)](https://churnlabs.onrender.com/docs)
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-Image-2496ED?style=flat&logo=docker&logoColor=white)](https://hub.docker.com/u/themrityunjaypathak)
 [![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
 [![Scikit-Learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 [![MLflow](https://img.shields.io/badge/MLflow-0194E2?style=flat&logo=mlflow&logoColor=white)](https://mlflow.org/)
@@ -18,6 +18,7 @@
 
 ## Table of Contents
 - [Problem Statement](#problem-statement)
+- [Overview](#overview)
 - [Quick Start](#quick-start)
 - [Workflow](#workflow)
 - [Impact](#impact)
@@ -33,59 +34,57 @@
 <hr>
 
 ## Problem Statement
-- Many companies struggle to accurately identify customers who are likely to discontinue their services.
-- Missed churn signals lead to customer attrition, directly impacting revenue and long-term business growth.
-- This project aims to identify high-risk customers early, enabling businesses to take proactive retention measures.
+- Telecom companies lose customers every month without knowing who is about to leave until it's too late.
+- Identifying churners early allows businesses to intervene with the right offer before the customer cancels.
+- This project predicts which customers are likely to churn, so retention teams can act early instead of reacting late.
+
+<hr>
+
+## Overview
+- Built an end-to-end churn prediction system on 7,000+ customer records from PostgreSQL using Scikit-learn pipelines, ensuring reproducible training and preventing data leakage.
+- Evaluated 7 classification models including a DummyClassifier baseline, selecting Logistic Regression based on recall and PR-AUC given class imbalance, with per-fold metrics tracked in MLflow.
+- Optimized the decision threshold via precision-recall curve, targeting ≥90% recall on the churn class while accepting a precision drop as missing a churner outweighs a false retention offer.
+- Deployed a Dockerized FastAPI backend on Render with a React frontend on Netlify, pulling the trained model from Hugging Face Hub as a remote artifact store for on-demand risk scoring.
 
 <hr>
 
 ## Quick Start
-- Run the entire project locally with a few simple commands :
+- Choose the setup path that fits your situation :
+
+**Path A : You have a PostgreSQL database configured**
 ```bash
 git clone https://github.com/themrityunjaypathak/ChurnLabs.git
 cd ChurnLabs
 
 make install-dev     # Install dependencies and setup virtual environment
 
-make ingest          # Fetch data from PostgreSQL (or skip if using local dataset)
+make ingest          # Fetch data from PostgreSQL
 make preprocess      # Clean and transform the data
 make train           # Train the model
 
-make api-dev         # Start FastAPI backend
-make frontend-dev    # Start React frontend
-```
-- Once the services are running, open the following URLs :
-
-**React Frontend**
-```
-http://localhost:5173
-```
-**FastAPI Backend**
-```
-http://localhost:8000
+make api-dev         # Start FastAPI backend → http://localhost:8000
+make frontend-dev    # Start React frontend → http://localhost:5173
 ```
 
-> [!NOTE]
-> Ensure that the PostgreSQL database is running and correctly configured before running ingestion.
+**Path B : You don't have a PostgreSQL database (use local dataset instead)**
+```bash
+git clone https://github.com/themrityunjaypathak/ChurnLabs.git
+cd ChurnLabs
 
-> [!IMPORTANT]
-> The default pipeline expects data to be ingested from a configured PostgreSQL database.
->
-> If you don't have a PostgreSQL database configured, you can use a local dataset instead :
->
-> - Download the dataset from [Kaggle](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
->
-> - Place the dataset at : `data/raw/customer-churn-raw.csv`
->
-> - Ensure the filename matches exactly as : `customer-churn-raw.csv`
-> 
-> Then run the preprocessing pipeline :
->
-> ```bash
-> make preprocess
-> ```
->
-> This will use the local dataset instead of the PostgreSQL database and proceed with preprocessing.
+make install-dev     # Install dependencies and setup virtual environment
+```
+Then download the dataset from [Kaggle](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) and place it at :
+```
+data/raw/customer-churn-raw.csv
+```
+Then continue :
+```bash
+make preprocess      # Clean and transform the data
+make train           # Train the model
+
+make api-dev         # Start FastAPI backend → http://localhost:8000
+make frontend-dev    # Start React frontend → http://localhost:5173
+```
 
 > [!TIP]
 > You can also start the entire application using Docker :
@@ -109,10 +108,8 @@ http://localhost:8000
 <hr>
 
 ## Impact
-- Achieved ~90% recall for churn, improving early identification of high-risk customers and reducing missed churn.
-- Optimized decision threshold to prioritize recall, aligning model performance with retention-focused objectives.
-- Enables targeted retention by identifying customers most likely to churn, improving retention effectiveness.
-- Deployed a real-time churn prediction system, enabling immediate churn risk assessment during decision making.
+- Achieved 90% recall on the held-out test set, correctly flagging 335 out of 374 churners while missing only 39, with no overfitting between train and test set.
+- Accepted a deliberate precision drop from 49% to 43% by tuning the decision threshold from 0.5 to 0.3632, as the cost of a false retention offer is lower than losing a churner.
 
 <hr>
 
@@ -138,17 +135,10 @@ pip install uv
 make install-dev
 ```
 
-### What happens during this process?
-- Create an isolated virtual environment (`.venv`).
-- Install all project dependencies (including development tools).
-- Sync package versions with `pyproject.toml` and `uv.lock`.
-- Ensure a fully reproducible and consistent environment.
-
 <hr>
 
 ### 3. Run Data Ingestion
-- This step extracts raw customer data from the PostgreSQL database,
-- And stores it locally for further processing.
+- This step extracts raw customer data from a PostgreSQL database and stores it locally for further processing.
 - Run the ingestion pipeline :
 ```bash
 make ingest
@@ -158,26 +148,6 @@ make ingest
 - Connects to a PostgreSQL database using credentials stored in `.env`.
 - Fetches customer churn data required for model training and evaluation.
 - Stores raw dataset locally at `data/raw/customer-churn-raw.csv`.
-
-> [!NOTE]
-> Ensure that the PostgreSQL database is running and correctly configured before running ingestion.
-
-> [!IMPORTANT]
-> The ingestion step requires access to a PostgreSQL database.
->
-> If you do not have access to the original database, you have two options :
->
-> 1. Use your own PostgreSQL database
->    - Upload the [dataset](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) to your database.
->    - Configure credentials in the `.env` file.
->    - Run `make ingest` to ingest the data locally.
->
-> 2. Skip ingestion and use dataset directly
->    - Download the [dataset](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) from Kaggle.
->    - Place it inside `data/raw/` as `customer-churn-raw.csv`.
->    - Skip ingestion and continue with preprocessing and training.
->
-> This ensures the project remains fully reproducible even without database access.
 
 <hr>
 
@@ -199,10 +169,9 @@ data/raw/customer-churn-raw.csv
     - Missing Values
     - Data Types
     - Categorical Levels
-3. Clean the Dataset
-- Typical cleaning steps include :
+3. Clean & Optimize the Dataset
+- Typical preprocessing steps include :
     - Removing Invalid Records
-    - Encoding Categorical Features
     - Trimming Whitespace
     - Type Conversions
 4. Export Processed Dataset
@@ -263,8 +232,8 @@ The system follows a local-first loading strategy with remote fallback :
 artifacts/models/
 artifacts/metrics/
 ```
-- If present ➜ load from local storage.
-- If not present ➜ fetch from Hugging Face.
+- If present, load from local storage.
+- If not present, fetch from Hugging Face.
 
 ### Why this design?
 - Enables seamless development using local artifacts.
@@ -274,31 +243,8 @@ artifacts/metrics/
 
 <hr>
 
-### 6. MLflow Experiment Tracking
-- The project uses MLflow to track machine learning experiments.
-- MLflow allows you to log :
-    - Model Parameters
-    - Evaluation Metrics
-    - Experiment Artifacts
-- Start the MLflow backend server :
-```bash
-make mlflow-ui
-```
-- Once the MLflow server starts, open the MLflow dashboard at :
-```
-http://localhost:5000
-```
-- Inside the dashboard you can :
-    - Compare Multiple Experiment Runs
-    - Visualize Evaluation Metrics
-    - Inspect Experiment Artifacts
-
-<img title="MLflow Dashboard" src="https://github.com/user-attachments/assets/35a086b4-f3af-48fe-9a79-c85eda64ce5f">
-
-<hr>
-
-### 7. Start the FastAPI Backend
-- The FastAPI server loads the trained model and expose endpoints for inference and system health.
+### 6. Start the FastAPI Backend
+- The FastAPI server exposes endpoints for serving predictions, health checks, and model metadata.
 - Run the FastAPI backend server :
 ```bash
 make api-dev
@@ -310,32 +256,13 @@ http://localhost:8000/docs
 - This interactive Swagger UI allows you to test endpoints directly.
 
 > [!IMPORTANT]
-> The FastAPI server exposes the following endpoints :
->
-> **1. Root Endpoint (`/`)**
-> 
-> - Returns a simple response confirming that the API is running.
->
-> **2. Health Check Endpoint (`/health`)**
-> 
-> - Verifies that the API service is active and the model is successfully loaded.
->
-> **3. Model Metadata Endpoint (`/info`)**
-> 
-> - Returns information about the trained model, like model version, training timestamp, and other metadata.
->
-> **4. Churn Prediction Endpoint (`/predict`)**
-> 
-> - Accepts customer data as input and returns the churn probability, predicted class, and the decision threshold.
-
-> [!TIP]
 > When deploying the backend on Render, make sure to configure the secrets in the Render dashboard.
 >
 > Navigate to : **Render Dashboard → Your Service → Environment → Environment Variables**
 >
 > Add the following environment variables :
 >
-> ```
+> ```bash
 > ENV=your_env_name
 > PORT=your_api_port
 > ALLOWED_ORIGINS=your_allowed_origins
@@ -359,18 +286,18 @@ Access the live API documentation [here](https://churnlabs.onrender.com/docs) or
 
 <hr>
 
-### 8. Start the React Frontend
-- The frontend provides an interactive UI for generating real-time churn predictions.
+### 7. Start the React Frontend
+- The frontend provides an interactive UI for generating on-demand churn predictions.
 ```bash
 make frontend-dev
 ```
-- This command installs the Node dependencies and starts the React development server at :
+- This command installs the Node.js dependencies and starts the React development server at :
 ```
 http://localhost:5173
 ```
 - The frontend communicates with the FastAPI backend to send requests and display predictions.
 
-> [!TIP]
+> [!IMPORTANT]
 > The project includes a `netlify.toml` file for seamless frontend deployment on Netlify.
 >
 > ```toml
@@ -393,11 +320,11 @@ http://localhost:5173
 >
 > Navigate to : **Netlify Dashboard → Site Settings → Environment Variables**
 >
-> ```bash
+> ```
 > VITE_API_URL=your_base_api_url
 > ```
 >
-> This variable defines the base API url that the React frontend will use for generating predictions.
+> This variable defines the base API URL that the React frontend will use for generating predictions.
 >
 > Without this variable, the frontend will still attempt to connect to the local API (`localhost:8000`).
 
@@ -407,12 +334,12 @@ Access the live application [here](https://churnlabs.netlify.app) or Click on th
 
 <hr>
 
-### 9. Start Entire Application with Docker
+### 8. Start Entire Application with Docker
 - Instead of running services manually, you can start the entire application using Docker.
 ```bash
 make compose-up-build
 ```
-- Docker compose will build and start all required services for the application using `docker-compose.yaml`.
+- Docker Compose will build and start all required services for the application using `docker-compose.yaml`.
 
 ### React Frontend
 ```
@@ -427,7 +354,7 @@ http://localhost:8000
 
 <hr>
 
-### 10. Push Entire Application to Docker Hub
+### 9. Push Entire Application to Docker Hub
 - This step builds and pushes both the backend and frontend images to Docker Hub using `docker-compose.yaml`.
 - Ensure Docker is installed and running.
 - Make sure you are logged in to Docker Hub using :
@@ -468,27 +395,26 @@ themrityunjaypathak/churnlabs-frontend:v1
 > 
 > View the Backend Docker Image [here](https://hub.docker.com/r/themrityunjaypathak/churnlabs-api) or Click on the Image below.
 >
-> <a href="https://hub.docker.com/r/themrityunjaypathak/churnlabs-api"><img title="Backend Docker Image" src="https://github.com/user-attachments/assets/d86d22ff-9b91-4341-ae3b-3286842211bc"></a>
+> <a href="https://hub.docker.com/r/themrityunjaypathak/churnlabs-api"><img title="Backend Docker Image" src="https://github.com/user-attachments/assets/bda95280-5eb1-4f66-a969-b5fe42932e71"></a>
 >
 > View the Frontend Docker Image [here](https://hub.docker.com/r/themrityunjaypathak/churnlabs-frontend) or Click on the Image below.
 >
-> <a href="https://hub.docker.com/r/themrityunjaypathak/churnlabs-frontend"><img title="Frontend Docker Image" src="https://github.com/user-attachments/assets/66043d7b-0e65-444e-8df2-8dddb4675795"></a>
+> <a href="https://hub.docker.com/r/themrityunjaypathak/churnlabs-frontend"><img title="Frontend Docker Image" src="https://github.com/user-attachments/assets/64cbbe66-e97f-4cb4-a245-cb4a67959f17"></a>
 
 <hr>
 
-### 11. Stop the Application
+### 10. Stop the Application
 - This step stops and removes all running containers.
 ```bash
 make compose-down
 ```
-- It frees up system resources and shuts down the application services.
 
 <hr>
 
 ## Config-Driven Design
-- This project adopts a config-driven approach to manage data, model, training and artifacts.
+- This project adopts a config-driven approach to manage data, model, training, and artifacts.
 - Instead of hardcoding values inside the codebase, these settings are stored in YAML configuration files.
-- These files are loaded during preprocessing, training, inference and artifacts logging.
+- These files are loaded during preprocessing, training, inference, and artifacts logging.
 ```
 config/
 ├── data-config.yaml
@@ -498,9 +424,9 @@ config/
 └── artifacts-config.yaml
 ```
 
-<img title="Config Files" src="https://github.com/user-attachments/assets/f7b07aca-ac4d-4f22-b7aa-a822d8f674e3">
+<img title="Config Files" src="https://github.com/user-attachments/assets/745c635f-2f0f-473f-ae63-a9be08fe4fd0">
 
-### Why this is useful?
+### Why Config-Driven design?
 
 ### 1. Cleaner Code
 - Configuration values are separated from pipeline logic.
@@ -533,13 +459,6 @@ threshold:
 ```
 - Changing this value updates the model behavior without touching the training pipeline.
 
-### 3. Better Reproducibility
-- All settings are stored in configuration files, making it easier to reproduce experiments consistently.
-
-### 4. Scalable Project Structure
-- As the project grows, new models or parameters can be added easily.
-- Simply extend the configuration files without modifying the core codebase.
-
 <hr>
 
 ## Dependency Management
@@ -552,16 +471,17 @@ threshold:
 	- Command Execution
 - into a single tool.
 
-<img title="uv by Astral" src="https://github.com/user-attachments/assets/0f061d2f-78d2-4bcc-9a48-70cf5700fc68">
+<img title="uv by Astral" src="https://github.com/user-attachments/assets/8427afdd-6642-49bb-bcb3-ae1b9b22be4e">
 
 ### Why use `uv` over `pip`?
 
 ### 1. Faster Dependency Installation
-- `uv` is significantly faster than `pip` due to its optimized resolver and parallel installation.
+- `uv` is significantly faster than `pip` due to its optimized resolver and parallel package installation.
 - This reduces setup time, especially for large projects with many dependencies.
 ```bash
 uv sync
 ```
+- In this project, uv sync reads from `uv.lock` and installs all dependencies in one step.
 
 ### 2. Reproducible Environments
 - Dependencies are locked in the `uv.lock` file.
@@ -585,7 +505,7 @@ uv sync
 <hr>
 
 ## Makefile
-- A Makefile is a configuration file used by the `Make` build automation tool.
+- A Makefile is a configuration file used by the `Make` build tool.
 - It defines reusable commands called targets.
 - Each target represents a specific task, such as :
     - Installing Dependencies
@@ -597,7 +517,7 @@ uv sync
 ### Why use a Makefile?
 - Using a Makefile improves the development workflow by simplifying command execution.
 - Instead of running long commands like :
-```python
+```bash
 uv run python scripts/run_training.py
 ```
 - You can simply run :
@@ -612,12 +532,14 @@ make help
 ```
 - This will display all supported tasks defined in the Makefile.
 
-### Setup `Make` for Windows
-- Windows does not include the `Make` utility by default.
-- The easiest and most reliable way to use `Make` is through WSL.
+### Install `Make` on Windows via WSL
 
 <details>
 <summary>Click Here for More Details</summary>
+<br>
+	
+- Windows does not include the `Make` utility by default.
+- The easiest and most reliable way to use `Make` is through WSL.
 
 ### Step 1 : Open PowerShell as Administrator
 - Open the Start Menu
@@ -642,7 +564,7 @@ wsl --install
     - Launch the App
 - The first launch may take a few minutes.
 - When Ubuntu runs for the first time, it will ask you to create a Linux user :
-```bash
+```
 Enter new UNIX username: your_username
 New password: your_password
 ```
@@ -672,16 +594,54 @@ sudo apt install build-essential -y
 make --version
 ```
 - You should see output similar to :
-```bash
+```
 GNU Make 4.x
 Built for x86_64-pc-linux-gnu
 ```
 - This confirms that `Make` is installed successfully.
-- Remember `Make` is available only inside the WSL terminal, not in Windows Command Prompt or PowerShell.
+- Remember, `Make` is available only inside the WSL terminal, not in Windows Command Prompt or PowerShell.
 
 </details>
 
-### Setup WSL in VS Code
+### Install `uv` in WSL
+
+<details>
+<summary>Click Here for More Details</summary>
+<br>
+
+- All Makefile commands are driven by `uv` under the hood.
+- This means `uv` must be installed inside WSL first after WSL and `Make` are set up
+
+### Step 1 : Open Your WSL (Ubuntu) Terminal
+- Open the Start Menu
+- Search for Ubuntu
+- Launch the App
+
+### Step 2 : Install `uv`
+- Run the following command inside the WSL terminal :
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+- This downloads and installs `uv` to `~/.local/bin`.
+
+### Step 3 : Update Your Shell PATH
+- If `uv` isn't recognized after installation, reload your shell config :
+```bash
+source ~/.bashrc
+```
+- Or open a new WSL terminal window.
+
+### Step 4 : Verify `uv` Installation
+- Check that `uv` was installed correctly :
+```bash
+uv --version
+```
+- You should see output similar to : `uv 0.x.x`
+- Once `uv` is installed and verified, all `make` commands will work as expected.
+
+</details>
+
+### Use `Make` in VS Code via WSL
 
 <details>
 <summary>Click Here for More Details</summary>
@@ -705,15 +665,19 @@ Built for x86_64-pc-linux-gnu
 Ubuntu (WSL)
 ```
 
+### Step 4 : Open Project in WSL
+- In VS Code, press `Ctrl + Shift + P`
+- Type `WSL: Open Folder in WSL`
+- Navigate to your project folder
+- This ensures all terminal commands run inside WSL, not Windows
+
 </details>
 
 <hr>
 
 ## Experiment Tracking
 - This project uses MLflow to track machine learning experiments, compare models, and log artifacts.
-- MLflow helps maintain reproducibility and transparency by tracking model parameters, evaluation metrics, etc.
-- Instead of manually tracking result in notebooks,
-- MLflow provides a centralized dashboard to analyze and compare model performance.
+- MLflow ensures reproducibility by tracking parameters, metrics, and artifacts in a centralized dashboard.
 
 ### Start the MLflow Dashboard
 - To start the MLflow dashboard locally, run the following command from the project root directory :
@@ -727,48 +691,51 @@ http://localhost:5000
 ```
 - The MLflow dashboard allows you to explore experiment runs and compare model results.
 
-<img title="MLflow UI" src="https://github.com/user-attachments/assets/30a4f665-84b6-45bb-8b50-db89c96ee5b2">
+<img title="MLflow UI" src="https://github.com/user-attachments/assets/0ba7f77b-c46d-4a14-817a-87a6645e7cf1">
 
 ### Types of Experiments Performed
 - During model development, two types of experiments were performed and tracked using MLflow.
 
 ### 1. Model Comparison
 - MLflow makes it easy to compare multiple models trained during experimentation.
-- For this project, several classification models were evaluated, including :
+- For this project, seven classification models were evaluated on the same stratified 5-fold splits, including :
+	- Dummy Classifier 
     - Logistic Regression
     - K-Nearest Neighbors
     - Support Vector Classifier
     - Decision Tree
     - Random Forest
     - Gradient Boosting
-- The dashboard allows sorting models by evaluation metrics such as :
+- Metrics tracked per model :
     - Accuracy
     - Precision
     - Recall
+    - F1-Score
     - ROC-AUC
     - PR-AUC
 - This helps identify the best-performing model based on business requirements.
 
-<img title="Model Comparison" src="https://github.com/user-attachments/assets/0a30ad8b-458a-41c3-bfc4-b766d7e2bf52">
+<img title="Model Comparison" src="https://github.com/user-attachments/assets/0740a01c-e806-426f-85ef-fbd904e6ffc5">
 
 ### 2. Threshold Optimization
 - After selecting the best-performing model, another experiment is conducted to optimize the decision threshold.
-- Instead of using the default classification threshold of 0.5,
-- Multiple thresholds were evaluated to improve the model's ability to detect churn.
+- Instead of using the default threshold of 0.5, out-of-fold probabilities from cross-validation were used,
+- To plot the precision-recall curve and identify the threshold that achieves ≥90% recall while maximizing precision.
 - These experiments focused on :
     - Analyzing recall across different thresholds.
     - Selecting a threshold that meets business requirements.
     - Balancing precision-recall trade-offs.
-- Optimal threshold selection allowed the model to achieve 90% recall for the churn class.
+- Optimal threshold selection allowed the model to achieve \~90% recall for the churn class.
+- This approach allows the trade-off between the two thresholds to be compared directly in the MLflow UI.
 
-<img title="Threshold Optimization" src="https://github.com/user-attachments/assets/6753c497-6e2b-4b90-bcc3-5a1be9fdc453">
+<img title="Threshold Optimization" src="https://github.com/user-attachments/assets/cc8281f6-6d36-4f61-92a0-4b84907dfc5b">
 
 ### Logged Artifacts
 - MLflow also stores experiment artifacts generated during training.
-- Some of the artifacts logged in this project include confusion matrix & classification reports.
+- Artifacts logged in this project include confusion matrix and classification reports.
 - These artifacts help analyze model behavior and support model selection.
 
-> [!IMPORTANT]
+> [!NOTE]
 > You can also reset MLflow experiments and remove stored runs for newer ones.
 >
 > To reset MLflow experiments, run this command from the project root directory :
@@ -779,11 +746,13 @@ http://localhost:5000
 >
 > Resetting MLflow means permanently deleting all experiments, runs, metrics, and artifacts stored locally.
 
+<img title="Logged Artifacts" src="https://github.com/user-attachments/assets/245a8a8b-18a3-4c7c-aa51-c2ae25027127">
+
 <hr>
 
 ## Model Training & Evaluation
 
-### 1. Load the Data
+### 1. Loading the Data
 
 <details>
 <summary>Click Here to view Code Snippet</summary>
@@ -792,14 +761,14 @@ http://localhost:5000
 ```python
 # Importing load_processed_data function from loaders module
 from churnlabs.data.loaders import load_processed_data
-df = load_processed_data()
-df.head()
+churn_data = load_processed_data()
+churn_data.head()
 ```
 </details>
 
 <hr>
 
-### 2. Split the Data
+### 2. Splitting the Data
 
 <details>
 <summary>Click Here to view Code Snippet</summary>
@@ -814,7 +783,7 @@ X_train, X_test, y_train, y_test = split_data(df)
 
 <hr>
 
-### 3. Encode Target Variable
+### 3. Encoding Target Variable
 
 <details>
 <summary>Click Here to view Code Snippet</summary>
@@ -829,7 +798,7 @@ y_train, y_test = target_encoder(y_train, y_test)
 
 <hr>
 
-### 4. Build Preprocessing Pipeline
+### 4. Building Preprocessing Pipeline
 
 <details>
 <summary>Click Here to view Code Snippet</summary>
@@ -840,7 +809,7 @@ y_train, y_test = target_encoder(y_train, y_test)
 cat_cols = X_train.select_dtypes(include='category').columns
 
 cat_trf = Pipeline(steps=[
-    ('ohe', OneHotEncoder(sparse_output=False, drop='first'))
+    ('ohe', OneHotEncoder(sparse_output=False, drop='first', handle_unknown='ignore'))
 ])
 ```
 ```python
@@ -852,12 +821,22 @@ num_trf = Pipeline(steps=[
 ])
 ```
 ```python
-# Column Transformation
+# Combining Everything into ColumnTransformer
 ctf = ColumnTransformer(transformers=[
     ('categorical', cat_trf, cat_cols),
     ('numerical', num_trf, num_cols)
 ], remainder='passthrough', n_jobs=-1)
 ```
+</details>
+
+<hr>
+
+### 5. Training a Baseline Model
+
+<details>
+<summary>Click Here to view Code Snippet</summary>
+<br>
+
 ```python
 # Importing DummyClassifier Model
 dummy = DummyClassifier(strategy='most_frequent', random_state=42)
@@ -869,23 +848,17 @@ pipe = Pipeline(steps=[
     ('model', dummy)
 ])
 ```
-</details>
-
-<hr>
-
-### 5. Train Baseline Model
-
-<details>
-<summary>Click Here to view Code Snippet</summary>
-<br>
-
 ```python
-# Cross-Validation
+# Stratified K-Fold
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+```
+```python
+# Cross-Validation Setup
 scoring = {
     'accuracy': 'accuracy',
     'precision': 'precision',
     'recall': 'recall',
-    'f1': 'f1',
+    'f1_score': 'f1',
     'roc_auc': 'roc_auc',
     'pr_auc': 'average_precision'
 }
@@ -893,24 +866,29 @@ scoring = {
 cv = cross_validate(estimator=pipe, X=X_train, y=y_train, cv=skf, scoring=scoring, n_jobs=-1)
 ```
 ```python
-# Cross Validation Results
+# Cross-Validation Result
 results = {metric.replace('test_', ''): [np.mean(scores), np.std(scores)] for metric, scores in cv.items() if metric.startswith('test')}
 results_df = pd.DataFrame(results, index=['mean', 'std']).T
 results_df
 ```
+</details>
+
+<details>
+<summary>Click Here to view Analysis</summary>
+<br>
 
 | | mean | std |
 |:---:|:---:|:---:|
 | accuracy | 0.7342 | 0.0 |
 | precision	| 0.0000 | 0.0 |
 | recall | 0.0000	| 0.0 |
-| f1 | 0.0000 | 0.0 |
+| f1_score | 0.0000 | 0.0 |
 | roc_auc | 0.5000 | 0.0 |
 | pr_auc | 0.2657	| 0.0 |
 
-### What `DummyClassifier` helps us check?
+### What does the `DummyClassifier` tell us?
 - The `DummyClassifier` gives us a baseline to compare against real models.
-- It predicts the majority class (`non-churn`) for every customer.
+- It predicts the majority class (`non-churn`) for every customer, ignoring all features.
 ```
 # Class Distribution
 churn
@@ -919,34 +897,35 @@ Yes    0.2657
 ```
 ```
 # Classification Metrics
-accuracy    0.73
-precision   0.00
-recall      0.00
-f1          0.00
-roc-auc     0.50
-pr-auc      0.26
+accuracy    73%
+precision   0
+recall      0
+f1_score    0
+roc_auc     0.5
+pr_auc      0.26
 ```
-- Since the dataset contains approximately 73% non-churn customers, the model achieves 73% accuracy.
-- However, it fails to identify any churners, resulting in `0` Precision, Recall, and F1 score.
-- The ROC AUC of 0.5 confirms that the model has no predictive power and performs as a random guessing.
+- Since the dataset contains ~73% non-churn customers, the model achieves 73% accuracy.
+- However, it fails to identify any churners, resulting in zero precision, recall, and F1-Score.
+- A model that never identifies a churner is useless, making recall and PR-AUC the only metrics that matter.
+- ROC-AUC of 0.5 and PR-AUC of 0.26 confirm no predictive power, performing equivalent to random guessing.
 - The `DummyClassifier` makes exactly the same prediction in every fold.
 - So every fold produces identical metrics, and that's why standard deviation is equal to 0.
-- This confirms our pipeline and cross-validation setup behave as expected and no obvious leakage exists.
+- This confirms our pipeline and cross-validation setup behave as expected.
 - Now any real model must surpass this benchmark to be considered a good performer.
 ```
 # Real Model Expectations
-Achieve PR AUC > 0.26
-Achieve ROC AUC > 0.50
-Achieve Precision > 0.00
-Achieve Recall > 0.00
-Achieve F1 Score > 0.00
+Achieve PR-AUC > 0.26
+Achieve ROC-AUC > 0.5
+Achieve Precision > 0
+Achieve Recall > 0
+Achieve F1-Score > 0
 ```
-- If a trained model cannot significantly outperform this baseline, it is not useful.
+- If a trained model cannot outperform this baseline, it is not useful.
 </details>
 
 <hr>
 
-### 6. Evaluate Multiple Models
+### 6. Multi-Model Comparison
 
 <details>
 <summary>Click Here to view Code Snippet</summary>
@@ -955,72 +934,132 @@ Achieve F1 Score > 0.00
 ```python
 # Multi-Model Dictionary 
 models = {
-    'dummy_classifier': DummyClassifier(strategy='most_frequent', random_state=42),
-    'logistic_regression': LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42),
-    'k_neighbors_classifier': KNeighborsClassifier(n_jobs=-1),
-    'support_vector_classifier': SVC(class_weight='balanced', probability=True, random_state=42),
-    'decision_tree_classifier': DecisionTreeClassifier(class_weight='balanced', random_state=42),
-    'random_forest_classifier': RandomForestClassifier(class_weight='balanced', random_state=42, n_jobs=-1),
-    'gradient_boosting_classifier': GradientBoostingClassifier(random_state=42)
+    'DC': DummyClassifier(strategy='most_frequent', random_state=42),
+    'LR': LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42),
+    'KNN': KNeighborsClassifier(n_jobs=-1),
+    'SVC': SVC(class_weight='balanced', probability=True, random_state=42),
+    'DT': DecisionTreeClassifier(class_weight='balanced', random_state=42),
+    'RF': RandomForestClassifier(class_weight='balanced', random_state=42, n_jobs=-1),
+    'GB': GradientBoostingClassifier(random_state=42)
 }
 ```
 ```python
-# Computing Average Metrics through Cross-Validation
-results = {}
-
-for name, model in models.items():
-    
-    pipe = Pipeline(steps=[
-        ('preprocessor', ctf),
-        ('model', model)
-    ])
-
-    skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-
-    cv_results = cross_validate(
-        estimator=pipe,
-        X=X_train,
-        y=y_train,
-        cv=skf,
-        scoring=['accuracy', 'precision', 'recall', 'f1', 'roc_auc', 'average_precision'],
-        n_jobs=-1
-    )
-
-    model_results = {}
-    for metric in ['accuracy', 'precision', 'recall', 'f1', 'roc_auc', 'average_precision']:
-        model_results[f"{metric}_mean"] = cv_results[f"test_{metric}"].mean()
-        model_results[f"{metric}_std"] = cv_results[f"test_{metric}"].std()
-
-    results[name] = model_results
-
-results_df = pd.DataFrame(results).T
-results_df
+# Plotting Metric Comparision Graph
+for model in results_df.columns:
+    print()
+    print(f'Model : {model}')
+    print('-' * 40)
+    print(f'Recall    : {results_df.loc["recall_mean", model]:.2f}')
+    print(f'PR-AUC    : {results_df.loc["pr_auc_mean", model]:.2f}')
+    print(f'ROC-AUC   : {results_df.loc["roc_auc_mean", model]:.2f}')
+    print(f'F1-Score  : {results_df.loc["f1_score_mean", model]:.2f}')
+    print(f'Precision : {results_df.loc["precision_mean", model]:.2f}')
+    print(f'Accuracy  : {results_df.loc["accuracy_mean", model]:.2f}')
 ```
+</details>
+
+<details>
+<summary>Click Here to view Analysis</summary>
+<br>
+
+```
+Model : DC
+----------------------------------------
+Recall    : 0.00
+PR-AUC    : 0.27
+ROC-AUC   : 0.50
+F1-Score  : 0.00
+Precision : 0.00
+Accuracy  : 0.73
+
+Model : LR
+----------------------------------------
+Recall    : 0.80
+PR-AUC    : 0.66
+ROC-AUC   : 0.85
+F1-Score  : 0.63
+Precision : 0.52
+Accuracy  : 0.75
+
+Model : KNN
+----------------------------------------
+Recall    : 0.53
+PR-AUC    : 0.52
+ROC-AUC   : 0.78
+F1-Score  : 0.55
+Precision : 0.56
+Accuracy  : 0.77
+
+Model : SVC
+----------------------------------------
+Recall    : 0.79
+PR-AUC    : 0.60
+ROC-AUC   : 0.83
+F1-Score  : 0.62
+Precision : 0.52
+Accuracy  : 0.75
+
+Model : DT
+----------------------------------------
+Recall    : 0.49
+PR-AUC    : 0.38
+ROC-AUC   : 0.65
+F1-Score  : 0.49
+Precision : 0.50
+Accuracy  : 0.73
+
+Model : RF
+----------------------------------------
+Recall    : 0.47
+PR-AUC    : 0.63
+ROC-AUC   : 0.83
+F1-Score  : 0.55
+Precision : 0.64
+Accuracy  : 0.79
+
+Model : GB
+----------------------------------------
+Recall    : 0.51
+PR-AUC    : 0.66
+ROC-AUC   : 0.85
+F1-Score  : 0.58
+Precision : 0.66
+Accuracy  : 0.80
+```
+
+<img title="Model Comparison" src="https://github.com/user-attachments/assets/dc5dcb22-c21b-4440-a5eb-9478f53a96c9">
+
 </details>
 
 <hr>
 
-### 7. Select `LogisticRegression` as Final Model
+### 7. Selecting `LogisticRegression` as Final Model
 
 <details>
 <summary>Click Here to view Code Snippet</summary>
 <br>
 
 ```python
-# Creating Logistic Regression Model Object
+# Creating LogisticRegression Model Object
 lr = LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)
 ```
 ```python
-# Final Pipeline with Logistic Regression
+# Final Pipeline with LogisticRegression
 pipe = Pipeline(steps=[
         ('preprocessor', ctf),
         ('model', lr)
     ])
 ```
 ```python
-# Cross Val Predict
+# Cross-Validation Predict
 y_pred_cv = cross_val_predict(estimator=pipe, X=X_train, y=y_train, cv=skf, method='predict', n_jobs=-1)
 ```
+</details>
+
+<details>
+<summary>Click Here to view Analysis</summary>
+<br>
+
 ```python
 # Classification Report
 print(classification_report(y_train, y_pred_cv, target_names=['No', 'Yes']))
@@ -1047,7 +1086,9 @@ ax[1].grid(visible=False)
 plt.tight_layout()
 plt.show()
 ```
-<img title="Confusion Matrix Plot" src="https://github.com/user-attachments/assets/31c58541-5cc3-420e-883d-4796b7499c35">
+
+<img title="Confusion Matrix Plot" src="https://github.com/user-attachments/assets/d2d45a25-3ba1-4824-b481-3ec7bbdb03d2">
+
 </details>
 
 <hr>
@@ -1059,7 +1100,7 @@ plt.show()
 <br>
 
 ```python
-# Fitting Pipeline
+# Fitting the Pipeline
 pipe.fit(X_train, y_train)
 ```
 ```python
@@ -1068,17 +1109,22 @@ raw_features = pipe.named_steps['preprocessor'].get_feature_names_out()
 ```
 ```python
 # Clean Column Names (splitting based on '__' and extracting 2nd element)
-# ['numerical', 'totalcharges'] -> 'totalcharges'
 features = [feature.split('__')[1] for feature in raw_features]
 ```
 ```python
-# Coefficients from Logistic Regression
+# Coefficients from LogisticRegression
 coefficients = pipe.named_steps['model'].coef_[0]
 ```
 ```python
 # Feature Importance DataFrame
 importance_df = pd.DataFrame({'feature': features, 'importance': coefficients}).sort_values(by='importance', ascending=False)
 ```
+</details>
+
+<details>
+<summary>Click Here to view Analysis</summary>
+<br>
+
 ```python
 # Feature Importance Plot
 plt.figure(figsize=(12, 6))
@@ -1091,19 +1137,26 @@ plt.grid(axis='both', linestyle='--', alpha=1)
 plt.tight_layout()
 plt.show()
 ```
-<img title="Feature Importance Plot" src="https://github.com/user-attachments/assets/fe447aab-ed24-4d03-9de2-4414e50bd441">
+
+<img title="Feature Importance Plot" src="https://github.com/user-attachments/assets/655319e5-6844-470e-8708-f95ff33795ac">
+
+### Feature Importance Interpretation
+Values represent impact on log-odds of churn.
+- 🟢 Positive coefficients → Increase churn risk
+- 🔴 Negative coefficients → Decrease churn risk
+
 </details>
 
 <hr>
 
-### 9. Decision Threshold Optimization
+### 9. Decision Threshold Tuning
 
 <details>
 <summary>Click Here to view Code Snippet</summary>
 <br>
 
 ```python
-# Cross Val Predict
+# Cross-Validation Predict
 y_proba_cv = cross_val_predict(estimator=pipe, X=X_train, y=y_train, cv=skf, method='predict_proba', n_jobs=-1)[:, 1]
 ```
 ```python
@@ -1122,7 +1175,8 @@ pr_results
 ```python
 # Define a Recall Target (Business Decision)
 recall_target = 0.90
-
+```
+```python
 # Evaluate Recall across Thresholds and Choose Best Threshold
 valid = pr_results[pr_results["recall"] >= recall_target]
 
@@ -1131,39 +1185,51 @@ if not valid.empty:
     best_threshold = best_row["threshold"]
 else:
     best_threshold = 0.5
+    print("Warning: No threshold achieved target recall of 0.90. Falling back to 0.5.")
 
 print(f"Best Threshold: {best_threshold:.4f}")
 ```
 </details>
 
+<details>
+<summary>Click Here to view Analysis</summary>
+<br>
+	
+```
+Best Threshold: 0.3632
+```
+</details>
+
 <hr>
 
-### 10. Performance Evaluation using Tuned Threshold
+### 10. Performance Evaluation with Tuned Threshold
 
 <details>
 <summary>Click Here to view Code Snippet</summary>
 <br>
 
 ```python
-# Cross Val Predict
-y_proba_cv = cross_val_predict(estimator=pipe, X=X_train, y=y_train, cv=skf, method='predict_proba', n_jobs=-1)[:, 1]
-```
-```python
 # Best Threshold
 y_pred_best = (y_proba_cv >= best_threshold).astype(int)
 ```
+</details>
+
+<details>
+<summary>Click Here to view Analysis</summary>
+<br>
+
 ```python
 # Classification Report
 print(classification_report(y_train, y_pred_best, target_names=['No', 'Yes']))
 ```
 ```
-              precision    recall  f1-score   support
+			  precision    recall  f1-score   support
 
-          No       0.94      0.61      0.74      4130
+          No       0.95      0.61      0.74      4130
          Yes       0.45      0.90      0.60      1495
 
     accuracy                           0.69      5625
-   macro avg       0.70      0.75      0.67      5625
+   macro avg       0.70      0.76      0.67      5625
 weighted avg       0.81      0.69      0.70      5625
 ```
 ```python
@@ -1178,12 +1244,14 @@ ax[1].grid(visible=False)
 plt.tight_layout()
 plt.show()
 ```
-<img title="Confusion Matrix Plot" src="https://github.com/user-attachments/assets/75c9791d-a952-4d85-b443-497e89b82b4c">
+
+<img title="Confusion Matrix Plot" src="https://github.com/user-attachments/assets/7aad908a-327d-4f35-bb12-e2e856a61878">
+
 </details>
 
 <hr>
 
-### 11. Final Evaluation on Test Set
+### 11. Final Model Evaluation on Test Set
 
 <details>
 <summary>Click Here to view Code Snippet</summary>
@@ -1194,37 +1262,91 @@ plt.show()
 pipe.fit(X_train, y_train)
 ```
 ```python
-# Evaluate Final Model once on the Test Set
+# Test Set Probability used for both Default and Tuned Threshold
 y_test_proba = pipe.predict_proba(X_test)[:, 1]
-y_test_pred = (y_test_proba >= best_threshold).astype(int)
+```
+</details>
+
+### Default Threshold
+
+<details>
+<summary>Click Here to view Analysis</summary>
+<br>
+
+```python
+# Default Threshold
+y_test_pred_default = (y_test_proba >= 0.5).astype(int)
 ```
 ```python
-# Classification Report
-print(classification_report(y_test, y_test_pred, target_names=['No', 'Yes']))
+# Classification Report on Default Threshold
+print(classification_report(y_test, y_test_pred_default, target_names=['No', 'Yes']))
 ```
 ```
               precision    recall  f1-score   support
 
-          No       0.93      0.59      0.72      1033
-         Yes       0.44      0.89      0.59       374
+          No       0.90      0.70      0.79      1033
+         Yes       0.49      0.80      0.61       374
 
-    accuracy                           0.67      1407
-   macro avg       0.69      0.74      0.65      1407
-weighted avg       0.80      0.67      0.69      1407
+    accuracy                           0.73      1407
+   macro avg       0.70      0.75      0.70      1407
+weighted avg       0.79      0.73      0.74      1407
 ```
 ```python
-# Plotting Confusion Matrix
+# Plotting Confusion Matrix on Default Threshold
 fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(12,4))
-ConfusionMatrixDisplay.from_predictions(y_test, y_test_pred, display_labels=['No', 'Yes'], cmap='crest', ax=ax[0])
-ConfusionMatrixDisplay.from_predictions(y_test, y_test_pred, display_labels=['No', 'Yes'], cmap='crest', normalize='all', ax=ax[1])
-ax[0].set_title('Confusion Matrix (Counts)')
-ax[1].set_title('Confusion Matrix (Normalized)')
+ConfusionMatrixDisplay.from_predictions(y_test, y_test_pred_default, display_labels=['No', 'Yes'], cmap='crest', ax=ax[0])
+ConfusionMatrixDisplay.from_predictions(y_test, y_test_pred_default, display_labels=['No', 'Yes'], cmap='crest', normalize='all', ax=ax[1])
+ax[0].set_title('Confusion Matrix at Default Threshold (Counts)')
+ax[1].set_title('Confusion Matrix at Default Threshold (Normalized)')
 ax[0].grid(visible=False)
 ax[1].grid(visible=False)
 plt.tight_layout()
 plt.show()
 ```
-<img title="Confusion Matrix Plot" src="https://github.com/user-attachments/assets/8dd991b1-8b00-4b42-bf79-1c6ad235f8a4">
+
+<img title="Confusion Matrix Plot on Default Threshold" src="https://github.com/user-attachments/assets/cae5a413-d0e9-455c-aa10-b9731c21e90a">
+
+</details>
+
+### Tuned Threshold
+
+<details>
+<summary>Click Here to view Analysis</summary>
+<br>
+
+```python
+# Tuned Threshold
+y_test_pred_tuned = (y_test_proba >= best_threshold).astype(int)
+```
+```python
+# Classification Report on Tuned Threshold
+print(classification_report(y_test, y_test_pred_tuned, target_names=['No', 'Yes']))
+```
+```
+              precision    recall  f1-score   support
+
+          No       0.94      0.58      0.71      1033
+         Yes       0.43      0.90      0.58       374
+
+    accuracy                           0.66      1407
+   macro avg       0.69      0.74      0.65      1407
+weighted avg       0.80      0.66      0.68      1407
+```
+```python
+# Plotting Confusion Matrix on Tuned Threshold
+fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(12,4))
+ConfusionMatrixDisplay.from_predictions(y_test, y_test_pred_tuned, display_labels=['No', 'Yes'], cmap='crest', ax=ax[0])
+ConfusionMatrixDisplay.from_predictions(y_test, y_test_pred_tuned, display_labels=['No', 'Yes'], cmap='crest', normalize='all', ax=ax[1])
+ax[0].set_title('Confusion Matrix at Tuned Threshold (Counts)')
+ax[1].set_title('Confusion Matrix at Tuned Threshold (Normalized)')
+ax[0].grid(visible=False)
+ax[1].grid(visible=False)
+plt.tight_layout()
+plt.show()
+```
+
+<img title="Confusion Matrix Plot on Tuned Threshold" src="https://github.com/user-attachments/assets/730a3b6c-fa0b-4971-a48c-abe82e362c6f">
+
 </details>
 
 <hr>
@@ -1279,7 +1401,7 @@ ChurnLabs/
 │   ├── Dockerfile                # Dockerfile for the frontend container
 │   ├── nginx.conf                # Nginx configuration for serving the frontend
 │   ├── package.json              # Node.js dependencies
-|   ├── package-lock.json         # Dependency lock file
+│   ├── package-lock.json         # Dependency lock file
 │   ├── index.html                
 │   ├── vite.config.ts            
 │   ├── eslint.config.js          
@@ -1293,7 +1415,7 @@ ChurnLabs/
 │
 ├── mlartifacts/                  # MLflow artifacts storage (ignored by Git)
 │   └── ...                       # Auto-generated MLflow run directories
-|
+│
 ├── notebooks/                    # Jupyter notebooks for experimentation
 │   ├── 01_eda.ipynb              # Exploratory data analysis
 │   └── 02_model.ipynb            # Model experimentation and MLflow tracking
@@ -1304,53 +1426,51 @@ ChurnLabs/
 │   └── run_training.py           # Model training pipeline
 │
 ├── src/
-│   |
+│   │
 │   └── churnlabs/
 │       │
 │       ├── core/                 # Core utility module
-|       |   ├── __init__.py
+│       │   ├── __init__.py
 │       │   ├── config.py
 │       │   ├── logger.py
 │       │   └── settings.py
 │       │
 │       ├── data/                 # Data loading and preprocessing module
-|       |   ├── __init__.py
+│       │   ├── __init__.py
 │       │   ├── ingestion.py
 │       │   ├── loaders.py
 │       │   ├── preprocessor.py
 │       │   └── export.py
 │       │
 │       ├── features/             # Feature engineering module
-|       |   ├── __init__.py
+│       │   ├── __init__.py
 │       │   └── split.py
 │       │
 │       ├── models/               # Model training and evaluation module
-|       |   ├── __init__.py
-│       |   ├── artifact.py
-│       |   ├── builder.py
-│       |   ├── encoder.py
-│       |   ├── evaluation.py
-│       |   ├── pipeline.py
-│       |   ├── transformer.py
-|       |   ├── loader.py
-│       |   └── uploader.py
-|       |
-|       └── __init__.py
-│
-├── docker-compose.yaml           # Docker orchestration for backend and frontend
-├── Makefile                      # Project commands (MLflow, FastAPI, React, Docker, etc.)
-├── pyproject.toml                # Python project configuration
-├── uv.lock                       # Dependency lock file
-├── netlify.toml                  # Netlify deployment configuration
-├── mlflow.db                     # MLflow experiment tracking database (ignored by Git)
+│       │   ├── __init__.py
+│       │   ├── artifact.py
+│       │   ├── builder.py
+│       │   ├── encoder.py
+│       │   ├── evaluation.py
+│       │   ├── pipeline.py
+│       │   ├── transformer.py
+│       │   ├── loader.py
+│       │   └── uploader.py
+│       │
+│       └── __init__.py
 │
 ├── .dockerignore                 # Backend Dockerignore rules
+├── .env.example                  # Example environment variables for backend
 ├── .gitignore                    # Project-specific Git ignore rules
 ├── .python-version               # Python version specification
-├── .env.example                  # Example environment variables for backend
-│
 ├── LICENSE                       # License specifying permissions and usage rights
-└── README.md                     # Project documentation
+├── Makefile                      # Project commands (MLflow, FastAPI, React, Docker, etc.)
+├── README.md                     # Project documentation
+├── docker-compose.yaml           # Docker orchestration for backend and frontend
+├── mlflow.db                     # MLflow experiment tracking database (ignored by Git)
+├── netlify.toml                  # Netlify deployment configuration
+├── pyproject.toml                # Python project configuration
+└── uv.lock                       # Dependency lock file
 ```
 
 <hr>
@@ -1360,6 +1480,6 @@ ChurnLabs/
 
 <div align="left">
   
-**[`^        Scroll to Top       ^`](#churnlabs--customer-churn-prediction)**
+**[`^        Scroll to Top       ^`](#top)**
 
 </div>
