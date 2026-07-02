@@ -5,4 +5,4 @@ model:
     random_state: 42
 
 threshold:
-  value: 0.3658
+  value: 0.3632
