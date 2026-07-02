@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: api/Dockerfile
-    image: themrityunjaypathak/churnlabs-api:v1
+    image: themrityunjaypathak/churnlabs-api:v2
     container_name: churn-api
     env_file:
       - .env
@@ -16,7 +16,7 @@ services:
       context: ./frontend
       args:
         VITE_API_URL: http://localhost:8000
-    image: themrityunjaypathak/churnlabs-frontend:v1
+    image: themrityunjaypathak/churnlabs-frontend:v2
     container_name: churn-frontend
     ports:
       - "3000:80"
