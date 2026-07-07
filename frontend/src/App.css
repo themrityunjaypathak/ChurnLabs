@@ -341,6 +341,10 @@ button:hover {
 
 @media (max-width: 768px) {
 
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
   .app {
     padding-top: 100px;
   }
